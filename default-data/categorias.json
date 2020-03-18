@@ -1,0 +1,18 @@
+[
+    {
+        "categoria":"Salão",
+        "categoriaCode":1
+    },
+    {
+        "categoria":"Bebidas",
+        "categoriaCode":2
+    },
+    {
+        "categoria":"Noiva",
+        "categoriaCode":3
+    },
+    {
+        "categoria":"Noivo",
+        "categoriaCode":4
+    }
+  ]

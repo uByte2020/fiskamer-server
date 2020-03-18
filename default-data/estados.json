@@ -1,0 +1,14 @@
+[
+    {
+        "estado":"Activo",
+        "estadoCode":1
+    },
+    {
+        "estado":"Inativo",
+        "estadoCode":2
+    },
+    {
+        "estado":"Pendente",
+        "estadoCode":3
+    }
+  ]
