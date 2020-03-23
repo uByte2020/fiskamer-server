@@ -75,15 +75,21 @@ const sendEmail = require('./../utils/email');
   })
 
   exports.login = catchAsync(async (req, res, next) => {
-    const { email, password } = req.body;
+    const { email, password, telemovel } = req.body;
 
-    if (!email || !password){
+    if (!password){
         return next(new AppError('Please provide email and password!', 400));
     }
 
-    const user = await User.findOne({ email }).select('+password');
-
-    if (!user && !(await user.correctPassword(password, user.password)))
+    let user = null;
+    if(email)
+      user = await User.findOne({ email }).select('+password');
+    else if(telemovel)
+      user = await User.findOne({ telemovel }).select('+password');
+    else 
+      return next(new AppError('Please provide email and password!', 400));
+      
+    if (!user || !(await user.correctPassword(password, user.password)))
         return next(new AppError('Please provide email and password!', 400));
     
     createSendToken(user, 200, res);
