@@ -1,8 +1,9 @@
-const FavoriteService= require('../models/favoriteServiceModel')
-const factory = require('./handlerFactory')
+const FavoriteService   = require('../models/favoriteServiceModel')
+const catchAsync        = require('../utils/catchAsync');
+const factory           = require('./handlerFactory');
+
 
 exports.addToFavorites=catchAsync(async(req,res)=>{ 
-    
     const doc = await FavoriteService.updateOne({'user.id': req.user.id}, {$push:{servicos:req.body.servico}}, {
         new:            true, //Para devolver o documento actualizado
         runValidators:  true

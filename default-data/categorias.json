@@ -14,5 +14,9 @@
     {
         "categoria":"Noivo",
         "categoriaCode":4
+    },
+    {
+        "categoria":"Música",
+        "categoriaCode":5
     }
   ]

@@ -10,5 +10,9 @@
     {
         "estado":"Pendente",
         "estadoCode":3
+    },
+    {
+        "estado":"Cancelado",
+        "estadoCode":4
     }
-  ]
+]
