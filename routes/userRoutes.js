@@ -1,6 +1,8 @@
-const express           = require('express')
-const userController    = require('./../controllers/userController')
-const authController    = require('./../controllers/authController')
+const express               = require('express')
+const userController        = require('./../controllers/userController')
+const authController        = require('./../controllers/authController')
+const solicitacaoRouter     = require('./solicitacaoRouter') 
+const favoriteServiceRoutes = require('./favoriteServiceRoutes');
 
 const router = express.Router();
 
@@ -10,6 +12,10 @@ router.post('/login', authController.login);
 router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword:token', authController.resetPassword);
 
+//Teste
+router.get('/testSendEmail', authController.testSendEmail);
+//Teste END
+
 router.use(authController.protect)
 
 router.patch('/updateMyPassword', authController.updatePassword);
@@ -18,7 +24,10 @@ router.patch('/updateMe', userController.updateMe);
 router.delete('/deleteMe', userController.deleteMe);
 router.get('/me', userController.getMe, userController.getUser);
 
-router.use(authController.restrictTo(1))
+router.use(authController.restrictTo(0))
+
+router.use('/:clientId/solicitacaos', solicitacaoRouter) 
+router.use('/:userId/favourites', favoriteServiceRoutes) 
 
 router
     .route('/')

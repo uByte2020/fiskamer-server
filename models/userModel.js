@@ -1,8 +1,9 @@
-const crypto = require('crypto');
-const mongoose = require('mongoose');
+const crypto    = require('crypto');
+const mongoose  = require('mongoose');
 const validator = require('validator');
-const bcrypt = require('bcryptjs');
-const Perfil = require('./perfilModel');
+const bcrypt    = require('bcryptjs');
+const Perfil    = require('./perfilModel');
+const AppError = require('./../utils/appError');
 
 const userSchema = new mongoose.Schema({
     name:{
@@ -87,7 +88,7 @@ userSchema.pre(/^find/, function(next){
 
 userSchema.pre('save', async function(next){
     this.role = await Perfil.findOne({ perfilCode: {$eq: this.role}})
-    // this.role = await Perfil.findById(this.role);
+    if(!this.role) return next(new AppError('Perfil Invalido', 500));
     next();
 }); 
 

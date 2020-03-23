@@ -11,6 +11,9 @@ const profileRouter         = require('./routes/profileRoutes');
 const categoryRouter        = require('./routes/categoryRoutes');
 const stateRouter           = require('./routes/stateRoutes');
 const packageRouter         = require('./routes/packageRoutes');
+const serviceRouter         = require('./routes/serviceRoutes');
+const solicitacaoRouter     = require('./routes/solicitacaoRouter');
+const favoriteServiceRoutes = require('./routes/favoriteServiceRoutes');
 const AppError              = require('./utils/appError')
 const globalHandlerError    = require('./controllers/errorController')
 
@@ -40,11 +43,14 @@ app.use(hpp());
 
 app.use(express.static(`${__dirname}/public`));
 
-app.use('/api/v1/users'     , userRouter    );
-app.use('/api/v1/profiles'  , profileRouter );
-app.use('/api/v1/categories', categoryRouter);
-app.use('/api/v1/states'    , stateRouter   );
-app.use('/api/v1/packages'  , packageRouter );
+app.use('/api/v1/users'            , userRouter            );
+app.use('/api/v1/perfils'          , profileRouter         );
+app.use('/api/v1/categories'       , categoryRouter        );
+app.use('/api/v1/estados'          , stateRouter           );
+app.use('/api/v1/packages'         , packageRouter         );
+app.use('/api/v1/services'         , serviceRouter         );
+app.use('/api/v1/solicitacaos'     , solicitacaoRouter     );
+app.use('/api/v1/favouriteServices' , favoriteServiceRoutes );
 
 app.all('*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404))

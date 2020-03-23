@@ -1,26 +1,22 @@
 const mongoose  = require('mongoose');
-const User    = require('./userModel')
 
 const favoriteServiceSchema = new mongoose.Schema({
     user:{
-        type: Object,
-        required: true,
+        type: mongoose.Schema.ObjectId,
+        ref: 'users',
+        required: true
     },
     servicos:{
         type: [mongoose.Schema.ObjectId],
-        ref: 'Servico',
-        required: true
+        ref: 'servicos',
+        required: true,
+        default: []
     },
     createdAt:{
         type: Date,
         default: Date.now(),
     }
 });
-
-favoriteServiceSchema.pre('save', async function(next){
-    this.user     = await User.findById(this.user);
-    next();
-})
 
 favoriteServiceSchema.pre(/^find/, async function(next){
     this.populate({

@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
-const Estado = require('./estadoModel')
+const Estado = require('./estadoModel');
+const AppError = require('./../utils/appError');
 
 const solicitacaoSchema = new mongoose.Schema({
     data:{
         type: Date,
-        required: [true, 'Solicitação deve ter uma data']
     },
     estado:{
         type: Object,
@@ -12,12 +12,12 @@ const solicitacaoSchema = new mongoose.Schema({
     },
     servico:{
         type: mongoose.Schema.ObjectId,
-        Ref: 'Servico',
+        Ref: 'servicos',
         required: [true, 'Uma Solicitação deve ter um serviço'],
     },
     cliente:{
         type: mongoose.Schema.ObjectId,
-        ref: 'User',
+        ref: 'users',
         required: true
     },
     createdAt:{
@@ -28,7 +28,13 @@ const solicitacaoSchema = new mongoose.Schema({
 });
 
 solicitacaoSchema.pre('save', async function(next){
-    this.estado  = await Estado.findById(this.estado);
+    this.estado    = await Estado.findOne({ estadoCode: {$eq: this.estado}});
+    if(!this.estado) return next(new AppError('Missing Filds', 500));
+    next();
+})
+
+solicitacaoSchema.pre(/^find/, async function(next){
+    this.populate({path: 'servico'}).populate({path: 'cliente'})
     next();
 })
 

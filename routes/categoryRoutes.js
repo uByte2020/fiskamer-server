@@ -4,14 +4,16 @@ const authController    = require('./../controllers/authController')
 
 const router = express.Router();
 
+router.use(authController.protect, authController.restrictTo(0, 1))
+
 router
     .route('/')
-    .get(authController.protect,categoryController.getAllCategories)      
-    .post(authController.protect,categoryController.createCotegory)      
+    .get(categoryController.getAllCategories)      
+    .post(categoryController.createCotegory)      
     
 router
     .route('/:id')
-    .patch(authController.protect,categoryController.updateCategory)
-    .delete(authController.protect,categoryController.deleteCategory)
+    .patch(categoryController.updateCategory)
+    .delete(categoryController.deleteCategory)
 
 module.exports = router;

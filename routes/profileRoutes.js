@@ -4,14 +4,16 @@ const authController        =   require('./../controllers/authController');
 
 const router                =   express.Router();
 
+router.use(authController.protect, authController.restrictTo(0))
+
 router
     .route('/')
-    .get(authController.protect,profileController.getAllProfiles)      
-    .post(authController.protect,profileController.createProfile)      
+    .get(profileController.getAllProfiles)      
+    .post(profileController.createProfile)      
     
 router
     .route('/:id')
-    .patch(authController.protect,profileController.updateProfile)
-    .delete(authController.protect,profileController.deleteProfile)
+    .patch(profileController.updateProfile)
+    .delete(profileController.deleteProfile)
 
 module.exports = router;

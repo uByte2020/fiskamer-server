@@ -39,28 +39,37 @@ const sendEmail = require('./../utils/email');
         }
     })
   }
+
   exports.siginup = catchAsync(async (req, res, next) => {
+    
+    if((req.body.role*1) === 0) //Não é permitido cadastrar-se como admin
+      return next(new AppError('Perfil Invalido', 500));
 
     const newUser = await User.create({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-        passwordConfirm: req.body.passwordConfirm,
-        role: req.body.role,
-        telemovel: req.body.telemovel,
-        endereco: req.body.endereco,
+        name            : req.body.name,
+        email           : req.body.email,
+        password        : req.body.password,
+        passwordConfirm : req.body.passwordConfirm,
+        role            : req.body.role, //perfilCode
+        telemovel       : req.body.telemovel,
+        endereco        : req.body.endereco
     });
 
-    // 3) Send it to user's email
-    const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/${newUser._id}`
+    try{
+      // 3) Send it to user's email
+      const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/${newUser._id}`
 
-    const message = `A new user sign up to Fiskamer: ${resetURL}.`;
-
-    sendEmail({
-      email: newUser.email,
-      subject: 'User SignUp',
-      message
-    });
+      const message = `A new user sign up to Fiskamer: ${resetURL}.`;
+      
+      await sendEmail({
+        email: newUser.name,
+        subject: 'User SignUp',
+        message
+      });
+      
+    }catch(err){
+      // return next(new AppError('There was an error sending the email. Try again later!'), 500)
+    }
 
     createSendToken(newUser, 201, res);
   })
@@ -72,9 +81,9 @@ const sendEmail = require('./../utils/email');
         return next(new AppError('Please provide email and password!', 400));
     }
 
-    const user = await User.findOne({ email }).select('+pasmsword');
+    const user = await User.findOne({ email }).select('+password');
 
-    if (!user || !(await user.correctPassword(password, user.password)))
+    if (!user && !(await user.correctPassword(password, user.password)))
         return next(new AppError('Please provide email and password!', 400));
     
     createSendToken(user, 200, res);
@@ -210,3 +219,29 @@ const sendEmail = require('./../utils/email');
     // 4) Log user in, send JWT 
     createSendToken(user, 200, res);
   });
+
+//===========================================================================
+//Teste
+  exports.testSendEmail = async (req, res, next) => {
+    try{
+      const result = await sendEmail({
+                        email: 'daniel20150154@gmail.com',
+                        subject: 'User SignUp',
+                        message: 'teste'
+                      });
+
+      res.status(200).json({
+        status: 'success',
+        data: {
+          result
+        }
+      })
+
+    }catch(err){
+      res.status(500).json({
+        status: 'Error',
+        message: err
+      })
+    }
+  }
+//Teste END
