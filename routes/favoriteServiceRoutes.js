@@ -13,15 +13,13 @@ router
 
 router
     .route('/')
-    .get(authController.restrictTo(0, 1), 
+    .get(authController.restrictTo(0), 
         favoriteServiceController.getUserFavoriteService,
         favoriteServiceController.getAllFavoriteService)      
     .post(favoriteServiceController.addToFavorites)   
     .patch(favoriteServiceController.removeFromFavorites)   
     
 router
-    .route('/:id')
-    .get(favoriteServiceController.getFavoriteService)
     .delete(favoriteServiceController.deleteFavoriteService)
 
 module.exports = router;
