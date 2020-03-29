@@ -15,7 +15,7 @@ exports.getAll = Model => catchAsync(async (req, res, next) => {
         status: 'success',
         results: docs.length,
         data:{
-            data: docs
+            docs
         }
     });
 });
@@ -25,19 +25,19 @@ exports.getOne = Model => catchAsync(async (req, res, next) => {
     res.status(200).json({
         status: 'success',
         data: {
-            data: doc
+            doc
         }
     })
 });
 
 
 exports.createOne  = Model => catchAsync(async (req, res, next) => {
-    const data = await Model.create(req.body);
+    const doc = await Model.create(req.body);
 
     res.status(201).json({
         status: 'success',
         data: {
-            tour: data
+            doc
         }
     })
 });
@@ -50,7 +50,7 @@ exports.updateOne = Model => catchAsync(async (req, res, next) => {
     res.status(200).json({
         status: 'success',
         data: { 
-            data: doc
+            doc
         }
     })
 });
