@@ -27,7 +27,10 @@ router
     
 router
     .route('/:id')  
-    .patch(serviceController.updateService)
+    .patch(
+        serviceController.uploadServicePhoto,
+        serviceController.resizeServicePhoto,
+        serviceController.updateService)
     .delete(serviceController.deleteService)
 
 module.exports = router;

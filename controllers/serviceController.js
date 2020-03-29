@@ -1,6 +1,63 @@
+const multer        = require('multer');
+const sharp         = require('sharp');
 const Service = require('./../models/servicoModel');
 const factory = require('./handlerFactory')
 const AppError = require('./../utils/appError');
+const catchAsync    = require('./../utils/catchAsync');
+
+const multerStorage = multer.memoryStorage();
+
+const multerFilter = (req, file, cb) =>{
+    if(file.mimetype.startsWith('image'))
+        cb(null, true)
+    else
+        cb(new AppError('Only images ara allowed', 400), false);
+}
+
+const upload = multer({
+    storage: multerStorage,
+    fileFilter: multerFilter
+})
+
+exports.uploadServicePhoto = upload.fields([
+    { name: 'coverImage',   maxCount: 1 },
+    { name: 'images',       maxCount: 10}
+])
+
+exports.resizeServicePhoto = catchAsync(async (req, res, next) => {
+    
+    if(!req.files) return next();
+
+    if(req.files.coverImage){
+        req.body.coverImage = `service-${req.params.id}-${Date.now()}-cover.jpeg`
+
+        await sharp(req.files.coverImage[0].buffer)
+                .resize(2000, 1333)
+                .toFormat('jpeg')
+                .jpeg({ quality: 90 })
+                .toFile(`public/img/services/${req.body.coverImage}`);
+    }
+    
+    if(req.files.images){
+        req.body.images = []
+
+        await Promise.all(
+            req.files.images.map(async (file, i) => {
+                const filename = `service-${req.params.id}-${Date.now()}-${i}.jpeg`
+                
+                await sharp(file.buffer)
+                        .resize(2000, 1333)
+                        .toFormat('jpeg')
+                        .jpeg({ quality: 90 })
+                        .toFile(`public/img/services/${filename}`);
+                
+                req.body.images.push(filename);
+            })
+        );
+    }
+
+    next();
+});
 
 exports.aliasTopServices = (req, res, next) => {
     req.query.limit = '10';

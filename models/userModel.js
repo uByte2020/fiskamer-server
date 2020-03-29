@@ -5,6 +5,8 @@ const bcrypt    = require('bcryptjs');
 const Perfil    = require('./perfilModel');
 const AppError = require('./../utils/appError');
 
+// mongoose.set('useFindAndModify', false);
+
 const userSchema = new mongoose.Schema({
     name:{
         type: String,

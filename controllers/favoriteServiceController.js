@@ -1,7 +1,7 @@
 const FavoriteService   = require('../models/favoriteServiceModel')
 const catchAsync        = require('../utils/catchAsync');
 const factory           = require('./handlerFactory');
-const AppError = require('./../utils/appError');
+const AppError          = require('./../utils/appError');
 
 exports.addToFavorites=catchAsync(async(req,res, next) => { 
 
