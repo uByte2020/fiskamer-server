@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
         trim: true,
         unique: [true, 'Um telemovel deve ser unique'],
          validate: function(tel){
-             const RegExp = /^[+]*[(]{0,1}244[)]{0,1}\s{0,1}9([1-4]|9)[0-9]{1}\s{0,1}[0-9]{3}\s{0,1}[0-9]{3}$/g;
+             const RegExp = /^([+]?244){0,1}\s{0,1}9([1-4]|9)[0-9]{1}\s{0,1}[0-9]{3}\s{0,1}[0-9]{3}$/g;
              return RegExp.test(tel)
          }
     },
