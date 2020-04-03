@@ -6,14 +6,20 @@ const planejamentoSchema = new mongoose.Schema({
         type: Date,
         required: [true, 'Solicitação deve ter uma data']
     },
+    cliente:{
+        type: mongoose.Schema.ObjectId,
+        ref: 'users',
+        required: true
+    },
     estado:{
         type: Object,
         required: [true, 'Uma Solicitação deve ter uma Data'],
     },
-    solicitacaos:[
+    solicitacoes:[
         {
             type: mongoose.Schema.ObjectId,
-            ref: 'Solicitacao'
+            ref: 'Solicitacao',
+            default: []
         }
     ],
     createdAt:{

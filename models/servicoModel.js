@@ -41,7 +41,7 @@ const servicoSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    pagamento:[
+    pagamentos:[
         {
             type: mongoose.Schema.ObjectId,
             ref: 'Pagamento',

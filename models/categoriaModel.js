@@ -5,10 +5,10 @@ const categoriaSchema = new mongoose.Schema({
         type: String,
         required: [true, 'A Categoria deve ter uma descrição']
     },
-    categoriaCode:{
-        type: Number,
-        required: [true, 'A Categoria deve ter um code'],
-    },
+    // categoriaCode:{
+    //     type: Number,
+    //     required: [true, 'A Categoria deve ter um code'],
+    // },
     createdAt:{
         type: Date,
         default: Date.now(),
