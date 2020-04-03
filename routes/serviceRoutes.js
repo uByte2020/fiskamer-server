@@ -3,6 +3,7 @@ const serviceController     = require('./../controllers/serviceController')
 const authController        = require('./../controllers/authController')
 const solicitacaoRouter     = require('./solicitacaoRouter') 
 const favoriteServiceRoutes = require('./favoriteServiceRoutes');
+const commentRoutes         = require('./commentRoutes');
 
 const router = express.Router();
 
@@ -18,6 +19,7 @@ router.use(authController.protect)
 
 router.use('/:servicoId/solicitacaos', solicitacaoRouter) 
 router.use('/:servicoId/favourites', favoriteServiceRoutes) 
+router.use('/:servicoId/comments', commentRoutes) 
 
 router.use(authController.restrictTo(0, 1))
 

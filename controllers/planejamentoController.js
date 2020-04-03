@@ -61,8 +61,8 @@ exports.validateData = catchAsync(async (req, res, next) => {
     next();
 });
 
-exports.getAllPlanejamento       = factory.getOne(Planejamento);
-exports.getPlanejamento          = factory.getAll(Planejamento);
+exports.getAllPlanejamento       = factory.getAll(Planejamento);
+exports.getPlanejamento          = factory.getOne(Planejamento);
 exports.createPlanejamento       = factory.createOne(Planejamento);
 exports.updatePlanejamento       = factory.updateOne(Planejamento);
 exports.deletePlanejamento       = factory.deleteOne(Planejamento);

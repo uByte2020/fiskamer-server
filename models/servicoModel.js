@@ -56,6 +56,10 @@ const servicoSchema = new mongoose.Schema({
         type: [Object],
         default: null
     },
+    classification: {
+        type: Number,
+        default: 0
+    },
     createdAt:{
         type: Date,
         default: Date.now(),
