@@ -10,13 +10,13 @@ const User      = require('./../models/userModel');
 
 dotenv.config({ path: './config.env' });
 
-// const DB = process.env.DATABASE_REMOTE
-//             .replace('<PASSWORD>',  process.env.DATABASE_PWD)
-//             .replace('<DBUSR>',     process.env.DATABASE_USR)
-//             .replace('<HOST>',      process.env.DATABASE_HOST)
-//             .replace('<DBNAME>',    process.env.DATABASE_NAME);
+const DB = process.env.DATABASE_REMOTE
+            .replace('<PASSWORD>',  process.env.DATABASE_PWD)
+            .replace('<DBUSR>',     process.env.DATABASE_USR)
+            .replace('<HOST>',      process.env.DATABASE_HOST)
+            .replace('<DBNAME>',    process.env.DATABASE_NAME);
 
-const DB = process.env.DATABASE_LOCAL;
+// const DB = process.env.DATABASE_LOCAL;
 
 mongoose
   .connect(DB, {
