@@ -12,10 +12,6 @@ router.post('/login', authController.login);
 router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword:token', authController.resetPassword);
 
-//Teste
-router.get('/testSendEmail', authController.testSendEmail);
-//Teste END
-
 router.use(authController.protect)
 
 router.patch('/updateMyPassword', authController.updatePassword);

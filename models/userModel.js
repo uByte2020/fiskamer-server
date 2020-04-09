@@ -89,8 +89,11 @@ userSchema.pre(/^find/, function(next){
 }) 
 
 userSchema.pre('save', async function(next){
-    this.role = await Perfil.findOne({ perfilCode: {$eq: this.role}})
-    if(!this.role) return next(new AppError('Perfil Invalido', 500));
+    // eslint-disable-next-line no-restricted-globals
+    if(!isNaN(this.role)){
+        this.role = await Perfil.findOne({ perfilCode: {$eq: this.role}})
+        if(!this.role) return next(new AppError('Perfil Invalido', 500));
+    }
     next();
 }); 
 

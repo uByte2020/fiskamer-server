@@ -72,8 +72,12 @@ servicoSchema.pre('save', async function(next){
     this.estado    = await Estado.findOne({ estadoCode: {$eq: this.estado}});
     this.pacote    = await Pacote.findById(this.pacote);
 
-    if(!this.categoria || !this.estado || !this.pacote) 
-        return next(new AppError('Missing Filds', 500));
+    if(!this.categoria) 
+        return next(new AppError('Missing categoria', 400));
+    if(!this.estado) 
+        return next(new AppError('Missing estado', 400));
+    if(!this.pacote) 
+        return next(new AppError('Missing pacote', 400));
     
     next();
 })

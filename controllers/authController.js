@@ -4,7 +4,8 @@ const jwt = require('jsonwebtoken');
 const User = require('./../models/userModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
-const sendEmail = require('./../utils/email');
+// const sendEmail = require('./../utils/email');
+const Email = require('./../utils/email');
 
 
   const signToken = id => {
@@ -55,21 +56,11 @@ const sendEmail = require('./../utils/email');
         endereco        : req.body.endereco
     });
 
-    try{
-      // 3) Send it to user's email
-      const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/${newUser._id}`
+    
+    // 3) Send it to user's email
+    const url = `${req.protocol}://${req.get('host')}/api/v1/users/${newUser._id}`
 
-      const message = `A new user sign up to Fiskamer: ${resetURL}.`;
-      
-      await sendEmail({
-        email: newUser.name,
-        subject: 'User SignUp',
-        message
-      });
-      
-    }catch(err){
-      // return next(new AppError('There was an error sending the email. Try again later!'), 500)
-    }
+    if(false) await new Email(newUser, url).sendWelcome();
 
     createSendToken(newUser, 201, res);
   })
@@ -158,18 +149,11 @@ const sendEmail = require('./../utils/email');
     const resetToken = user.createPasswordResetToken();
     await user.save({ validateBeforeSave: false })
 
-    // 3) Send it to user's email
-    const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`
-
-    const message = `Forget your password? Submit a PATCH request with your new password and 
-                     passwordConfirm to: ${resetURL}.\n If you didn't forget your password, 
-                     please ignore this email`;
     try{
-      await sendEmail({
-        email: user.email,
-        subject: 'Your password reset token (Valid for 24h)',
-        message
-      });
+      // 3) Send it to user's email
+      const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`
+
+      if(false) await new Email(user, resetURL).sendPasswordReset();
 
       res.status(200).json({
         status: 'success',
@@ -225,29 +209,3 @@ const sendEmail = require('./../utils/email');
     // 4) Log user in, send JWT 
     createSendToken(user, 200, res);
   });
-
-//===========================================================================
-//Teste
-  exports.testSendEmail = async (req, res, next) => {
-    try{
-      const result = await sendEmail({
-                        email: 'daniel20150154@gmail.com',
-                        subject: 'User SignUp',
-                        message: 'teste'
-                      });
-
-      res.status(200).json({
-        status: 'success',
-        data: {
-          result
-        }
-      })
-
-    }catch(err){
-      res.status(500).json({
-        status: 'Error',
-        message: err
-      })
-    }
-  }
-//Teste END

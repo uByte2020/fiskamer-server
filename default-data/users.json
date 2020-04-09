@@ -1,0 +1,29 @@
+[
+    {
+        "name": "Admin",
+        "email": "admin@fiskamer.com",
+        "password": "123",
+        "passwordConfirm": "123",
+        "role": "0",
+        "telemovel":"+244923235289",
+        "endereco":"Teste Testing"
+    },
+    {
+        "name": "Teste Teste",
+        "email": "fiskamer@mailsac.com",
+        "password": "123",
+        "passwordConfirm": "123",
+        "role": "1",
+        "telemovel":"+244919999992",
+        "endereco":"Teste Testing"
+    },
+    {
+        "name": "Teste Teste",
+        "email": "fiskamer@gmail.com",
+        "password": "123",
+        "passwordConfirm": "123",
+        "role": "2",
+        "telemovel":"+244919999991",
+        "endereco":"Teste Testing"
+    }
+]
