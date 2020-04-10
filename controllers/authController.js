@@ -60,7 +60,8 @@ const Email = require('./../utils/email');
     // 3) Send it to user's email
     const url = `${req.protocol}://${req.get('host')}/api/v1/users/${newUser._id}`
 
-    if(false) await new Email(newUser, url).sendWelcome();
+    // if(false) 
+    await new Email(newUser, url).sendWelcome();
 
     createSendToken(newUser, 201, res);
   })
@@ -153,7 +154,7 @@ const Email = require('./../utils/email');
       // 3) Send it to user's email
       const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`
 
-      if(false) await new Email(user, resetURL).sendPasswordReset();
+      await new Email(user, resetURL).sendPasswordReset();
 
       res.status(200).json({
         status: 'success',

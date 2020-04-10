@@ -1,17 +1,21 @@
 const nodemailer = require('nodemailer');
 const pug        = require('pug');
 const htmlToText = require('html-to-text')
+const sgMail     = require('@sendgrid/mail')
+
+sgMail.setApiKey(process.env.SENDGRID_APIKEY);
 
 module.exports = class Email{
     constructor(user, url) {
         this.to         = user.email;
         this.firstName  = user.name.split(' ')[0];
         this.url        = url;
-        this.from       = `Fiskamer <${process.env.EMAIL_FROM}>`
+        this.from       = process.env.EMAIL_FROM
     }
 
     newTransport(){
-        // if(process.env.NODE_ENV === 'production'){
+ 
+        if(process.env.NODE_ENV === 'production'){
             return nodemailer.createTransport({
                 service: 'SendGrid',
                 auth: {
@@ -19,16 +23,16 @@ module.exports = class Email{
                     pass: process.env.SENDGRID_PASSWORD
                 }
             });
-        // }
+        }
         
-        // return nodemailer.createTransport({
-        //     host: process.env.EMAIL_HOST,
-        //     port: process.env.EMAIL_PORT,
-        //     auth: {
-        //         user: process.env.EMAIL_USERNAME,
-        //         pass: process.env.EMAIL_PASSWORD
-        //     }
-        // });
+        return nodemailer.createTransport({
+            host: process.env.EMAIL_HOST,
+            port: process.env.EMAIL_PORT,
+            auth: {
+                user: process.env.EMAIL_USERNAME,
+                pass: process.env.EMAIL_PASSWORD
+            }
+        });
     }
 
     async send(template, subject){
@@ -47,8 +51,9 @@ module.exports = class Email{
             html:       html,
             text:       htmlToText.fromString(html),
         }
-        process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
-        await this.newTransport().sendMail(mailOptions);
+        // process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
+        // await this.newTransport().sendMail(mailOptions);
+        await sgMail.send(mailOptions);
     }
 
     async sendWelcome(){
