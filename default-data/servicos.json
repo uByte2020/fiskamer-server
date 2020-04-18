@@ -17,7 +17,13 @@
                 "price": 2000
             }
         ],
-        "price": 4000
+        "price": 4000,
+        "location": {
+            "description": "Miami, USA",
+            "type": "Point",
+            "coordinates": [-80.185942, 25.774772],
+            "address": "301 Biscayne Blvd, Miami, FL 33132, USA"
+        }
     },
     {
         "nome": "Testing 2",
@@ -36,7 +42,13 @@
                 "feature": "Musica",
                 "price": 2000
             }
-        ]
+        ],
+        "location": {
+            "description": "Miami, USA",
+            "type": "Point",
+            "coordinates": [-80.185942, 25.774772],
+            "address": "301 Biscayne Blvd, Miami, FL 33132, USA"
+        }
     },
     {
         "nome": "Testing 3",
@@ -46,7 +58,13 @@
         "fornecedor": "5e78c1b47ce9380e90bdd17b",
         "coverImage": "teste",
         "estado": 1,
-        "price": 2000
+        "price": 2000,
+        "location": {
+            "description": "Miami, USA",
+            "type": "Point",
+            "coordinates": [-80.185942, 25.774772],
+            "address": "301 Biscayne Blvd, Miami, FL 33132, USA"
+        }
     },
     {
         "nome": "Testing 4",
@@ -56,7 +74,13 @@
         "fornecedor": "5e78c1b47ce9380e90bdd17b",
         "coverImage": "teste",
         "estado": 1,
-        "price": 5000
+        "price": 5000,
+        "location": {
+            "description": "Miami, USA",
+            "type": "Point",
+            "coordinates": [-80.185942, 25.774772],
+            "address": "301 Biscayne Blvd, Miami, FL 33132, USA"
+        }
     },
     {
         "nome": "Testing 5",
@@ -66,6 +90,12 @@
         "fornecedor": "5e78c1b47ce9380e90bdd17b",
         "coverImage": "teste",
         "estado": 1,
-        "price": 5000
+        "price": 5000,
+        "location": {
+            "description": "Miami, USA",
+            "type": "Point",
+            "coordinates": [-80.185942, 25.774772],
+            "address": "301 Biscayne Blvd, Miami, FL 33132, USA"
+        }
     }
   ]

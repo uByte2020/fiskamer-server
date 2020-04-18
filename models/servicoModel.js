@@ -58,7 +58,19 @@ const servicoSchema = new mongoose.Schema({
     },
     classification: {
         type: Number,
-        default: 0
+        default: 4.5,
+        max: 5,
+        min: 1
+    },
+    location: {
+        type: {
+            type: String,
+            default: 'Point',
+            enum: ['Point']
+        },
+        coordinates: [Number],
+        address: String,
+        description: String
     },
     createdAt:{
         type: Date,
@@ -66,6 +78,8 @@ const servicoSchema = new mongoose.Schema({
         select: false
     }
 });
+
+servicoSchema.index({ location: '2dsphere' })
 
 servicoSchema.pre('save', async function(next){
     this.categoria = await Categoria.findById(this.categoria);

@@ -1,22 +1,17 @@
 [
     {
-        "categoria":"Salão",
-        "categoriaCode":1
+        "categoria":"Salão"
     },
     {
-        "categoria":"Bebidas",
-        "categoriaCode":2
+        "categoria":"Bebidas"
     },
     {
-        "categoria":"Noiva",
-        "categoriaCode":3
+        "categoria":"Noiva"
     },
     {
-        "categoria":"Noivo",
-        "categoriaCode":4
+        "categoria":"Noivo"
     },
     {
-        "categoria":"Música",
-        "categoriaCode":5
+        "categoria":"Música"
     }
   ]

@@ -13,7 +13,15 @@ router
 
 router
     .route('/:id')
-    .get(serviceController.getService) 
+    .get(serviceController.getService)
+    
+router
+    .route('/within/:distance/center/:coordenates')
+    .get(serviceController.getServicesWithin)
+
+router
+    .route('/distances/:coordenates')
+    .get(serviceController.getServicesDistances)
 
 router.use(authController.protect)
 

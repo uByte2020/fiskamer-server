@@ -1,8 +1,8 @@
 const multer        = require('multer');
 const sharp         = require('sharp');
-const Service = require('./../models/servicoModel');
-const factory = require('./handlerFactory')
-const AppError = require('./../utils/appError');
+const Service       = require('./../models/servicoModel');
+const factory       = require('./handlerFactory')
+const AppError      = require('./../utils/appError');
 const catchAsync    = require('./../utils/catchAsync');
 
 const multerStorage = multer.memoryStorage();
@@ -32,10 +32,10 @@ exports.resizeServicePhoto = catchAsync(async (req, res, next) => {
         req.body.coverImage = `service-${req.params.id}-${Date.now()}-cover.jpeg`
 
         await sharp(req.files.coverImage[0].buffer)
-                .resize(2000, 1333)
-                .toFormat('jpeg')
-                .jpeg({ quality: 90 })
-                .toFile(`public/img/services/${req.body.coverImage}`);
+            .resize(2000, 1333)
+            .toFormat('jpeg')
+            .jpeg({ quality: 90 })
+            .toFile(`public/img/services/${req.body.coverImage}`);
     }
     
     if(req.files.images){
@@ -122,6 +122,64 @@ exports.verifyPayment = (req, res, next) => {
     
     next();
 }
+
+// '/within/:distance/center/:coordenates'
+exports.getServicesWithin = catchAsync(async (req, res, next) => {
+    const {distance, coordenates} = req.params;
+    const [latitude, longitude] = coordenates.split(',');
+    
+    if(!latitude || !longitude){
+        return next(new AppError('Por favor, adicione latitude e longitude'))
+    }
+
+    const radius = distance/6378.1;  
+
+    const services = await Service.find(
+        {location: { $geoWithin: { $centerSphere: [[longitude, latitude], radius]} }}
+    )
+
+    res.status(200).json({
+        status: 'success',
+        results: services.length,
+        data: {
+            services
+        }
+    })
+
+})
+
+
+// '/distance/:coordenates'
+exports.getServicesDistances = catchAsync(async (req, res, next) => {
+    const {coordenates} = req.params;
+    const [latitude, longitude] = coordenates.split(',');
+    
+    if(!latitude || !longitude){
+        return next(new AppError('Por favor, adicione latitude e longitude'))
+    }
+
+    const services = await Service.aggregate([
+        { 
+            $geoNear: { 
+                near:{
+                    type: 'Point',
+                    coordenates: [longitude, latitude]
+                },
+                distanceField: 'distance',
+                distanceMultiplier: 0.001
+            }
+        }
+    ])
+
+    res.status(200).json({
+        status: 'success',
+        results: services.length,
+        data: {
+            services
+        }
+    })
+
+})
 
 exports.getService          = factory.getOne(Service);
 exports.getAllServices      = factory.getAll(Service);
