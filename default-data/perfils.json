@@ -1,0 +1,14 @@
+[
+    {
+        "perfil":"Admin",
+        "perfilCode":0
+    },
+    {
+        "perfil":"Fornecedor",
+        "perfilCode":1
+    },
+    {
+        "perfil":"Cliente",
+        "perfilCode":2
+    }
+  ]

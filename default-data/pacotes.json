@@ -1,0 +1,14 @@
+[
+    {
+        "pacote":"Basico",
+        "pacoteCode":1,
+        "descricao":"",
+        "preco":0
+    },
+    {
+        "pacote":"Pro",
+        "pacoteCode":0,
+        "descricao":"",
+        "preco":0
+    }
+  ]

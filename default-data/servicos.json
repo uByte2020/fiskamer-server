@@ -1,0 +1,101 @@
+[
+    {
+        "nome": "Testing 1",
+        "endereco": "Av 21 de Jan Morro Bento",
+        "pacote": "5e78c7979d1d7c3fbc5665be",
+        "categoria": "5e78c66ae39a972c6877f60c",
+        "fornecedor": "5e78c1b47ce9380e90bdd17b",
+        "coverImage": "teste",
+        "estado": 3,
+        "features": [
+            {
+                "feature": "Bebidas",
+                "price": 2000
+            },
+            {
+                "feature": "Musica",
+                "price": 2000
+            }
+        ],
+        "price": 4000,
+        "location": {
+            "description": "Miami, USA",
+            "type": "Point",
+            "coordinates": [-80.185942, 25.774772],
+            "address": "301 Biscayne Blvd, Miami, FL 33132, USA"
+        }
+    },
+    {
+        "nome": "Testing 2",
+        "endereco": "Benfica",
+        "pacote": "5e78c7979d1d7c3fbc5665be",
+        "categoria": "5e78c66ae39a972c6877f60c",
+        "fornecedor": "5e78c1b47ce9380e90bdd17b",
+        "coverImage": "teste",
+        "estado": 1,
+        "features": [
+            {
+                "feature": "Bebidas",
+                "price": 2000
+            },
+            {
+                "feature": "Musica",
+                "price": 2000
+            }
+        ],
+        "location": {
+            "description": "Miami, USA",
+            "type": "Point",
+            "coordinates": [-80.185942, 25.774772],
+            "address": "301 Biscayne Blvd, Miami, FL 33132, USA"
+        }
+    },
+    {
+        "nome": "Testing 3",
+        "endereco": "Talatona",
+        "pacote": "5e78c7979d1d7c3fbc5665be",
+        "categoria": "5e78c66ae39a972c6877f60c",
+        "fornecedor": "5e78c1b47ce9380e90bdd17b",
+        "coverImage": "teste",
+        "estado": 1,
+        "price": 2000,
+        "location": {
+            "description": "Miami, USA",
+            "type": "Point",
+            "coordinates": [-80.185942, 25.774772],
+            "address": "301 Biscayne Blvd, Miami, FL 33132, USA"
+        }
+    },
+    {
+        "nome": "Testing 4",
+        "endereco": "Mutamba",
+        "pacote": "5e78c7979d1d7c3fbc5665be",
+        "categoria": "5e78c66ae39a972c6877f60c",
+        "fornecedor": "5e78c1b47ce9380e90bdd17b",
+        "coverImage": "teste",
+        "estado": 1,
+        "price": 5000,
+        "location": {
+            "description": "Miami, USA",
+            "type": "Point",
+            "coordinates": [-80.185942, 25.774772],
+            "address": "301 Biscayne Blvd, Miami, FL 33132, USA"
+        }
+    },
+    {
+        "nome": "Testing 5",
+        "endereco": "Golf 2",
+        "pacote": "5e78c7979d1d7c3fbc5665be",
+        "categoria": "5e78c66ae39a972c6877f60c",
+        "fornecedor": "5e78c1b47ce9380e90bdd17b",
+        "coverImage": "teste",
+        "estado": 1,
+        "price": 5000,
+        "location": {
+            "description": "Miami, USA",
+            "type": "Point",
+            "coordinates": [-80.185942, 25.774772],
+            "address": "301 Biscayne Blvd, Miami, FL 33132, USA"
+        }
+    }
+  ]
