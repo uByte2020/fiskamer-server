@@ -4,14 +4,14 @@ const User          = require('./../models/userModel');
 const catchAsync    = require('./../utils/catchAsync');
 const AppError      = require('./../utils/appError');
 const factory       = require('./handlerFactory')
-
+const ErrorMessage  = require('./../utils/error')
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) =>{
     if(file.mimetype.startsWith('image'))
         cb(null, true)
     else
-        cb(new AppError('Only images ara allowed', 400), false);
+        cb(new AppError(ErrorMessage[14].message, 400), false);
 }
 
 const upload = multer({
@@ -46,18 +46,18 @@ const filterObj = (obj, ...allowedFields) => {
 exports.updateMe = catchAsync(async(req, res) => {
     // 1) Create error if user POSTs password data
     if(req.body.password || req.body.passwordConfirm){
-        return new AppError('This route is not for password updates. Please use /updateMyPassword', 400)
+        return new AppError(ErrorMessage[16].message, 400)
     }
 
     const filtedObect = filterObj(req.body, 'name', 'email', 'role', 'telemovel', 'endereco');
-
+    const old_doc= await User.findById(req.user.id)
     if(req.file) filtedObect.photo = req.body.photo
     // 2) Update the user document
     const user = await User.findByIdAndUpdate(req.user.id, filtedObect, { 
         new: true,
         runValidators: true
     });
-
+    factory.createLogs(req.user.id,User,old_doc,user, req.method)
     res.status(200).json({
         status: 'success',
         data:{
@@ -68,8 +68,9 @@ exports.updateMe = catchAsync(async(req, res) => {
 
 exports.deleteMe = catchAsync(async(req, res) => {
     // 2) Update the user document
+    const old_doc= await User.findById(req.user.id)
     await User.findByIdAndUpdate(req.user.id, { active: false });
-
+    factory.createLogs(req.user.id,User,old_doc,null, req.method)
     res.status(204).json({
         status: 'success',
         data: null

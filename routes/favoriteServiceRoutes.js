@@ -8,7 +8,7 @@ const router = express.Router({ mergeParams: true});
 router.use(authController.protect)
 
 router
-    .route('/MyFavourites')
+    .route('/MyFavorites')
     .get(favoriteServiceController.getMyFavoriteService, favoriteServiceController.getAllFavoriteService)
 
 router

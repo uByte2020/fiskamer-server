@@ -2,18 +2,19 @@ const FavoriteService   = require('../models/favoriteServiceModel')
 const catchAsync        = require('../utils/catchAsync');
 const factory           = require('./handlerFactory');
 const AppError          = require('./../utils/appError');
-
+const ErrorMessage = require('./../utils/error');
 exports.addToFavorites=catchAsync(async(req,res, next) => { 
 
     if(req.params.servicoId) req.body.servico = req.params.servicoId
 
-    if(!req.body.servico) return next(new AppError('No services to add', 400));
-
-    const doc = await FavoriteService.updateOne({user: req.user.id}, {$push:{servicos:req.body.servico}}, {
+    if(!req.body.servico) return next(new AppError(ErrorMessage[12].message, 400));
+    const old_doc= await  FavoriteService.find({user: req.user.id})
+    const doc = await FavoriteService.findOneAndUpdate({user: req.user.id}, {$push:{servicos:req.body.servico}}, {
         new:            true, //Para devolver o documento actualizado
         runValidators:  true,
         upsert: true 
     });
+    factory.createLogs(req.user.id,FavoriteService,old_doc.toString(),doc,req.method);
     res.status(200).json({
         status: 'success',
         data: { 
@@ -25,11 +26,12 @@ exports.addToFavorites=catchAsync(async(req,res, next) => {
 exports.removeFromFavorites=catchAsync(async(req,res)=>{ 
 
     if(req.params.servicoId) req.body.servico = req.params.servicoId
-
-    const doc = await FavoriteService.updateOne({user: req.user.id}, { $pull: { servicos: req.body.servico} }, {
+    const old_doc= await  FavoriteService.find({user: req.user.id})
+    const doc = await FavoriteService.findOneAndUpdate({user: req.user.id}, { $pull: { servicos: req.body.servico} }, {
         new:            true, //Para devolver o documento actualizado
         runValidators:  true
     });
+    factory.createLogs(req.user.id,FavoriteService,old_doc.toString(),doc,req.method);
     res.status(200).json({
         status: 'success',
         data: { 

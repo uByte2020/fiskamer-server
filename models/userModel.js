@@ -4,7 +4,8 @@ const validator = require('validator');
 const bcrypt    = require('bcryptjs');
 const Perfil    = require('./perfilModel');
 const AppError = require('./../utils/appError');
-
+const UserStatistic = require('./userStatisticModel')
+const ErrorMessage  = require('./../utils/error')
 // mongoose.set('useFindAndModify', false);
 
 const userSchema = new mongoose.Schema({
@@ -92,7 +93,7 @@ userSchema.pre('save', async function(next){
     // eslint-disable-next-line no-restricted-globals
     if(!isNaN(this.role)){
         this.role = await Perfil.findOne({ perfilCode: {$eq: this.role}})
-        if(!this.role) return next(new AppError('Perfil Invalido', 500));
+        if(!this.role) return next(new AppError(ErrorMessage[0].message, 500));
     }
     next();
 }); 
@@ -143,6 +144,39 @@ userSchema.methods.createPasswordResetToken = async function(){
     
     return resetToken;
 }
+
+const StatisticUser= async function(){
+    await UserStatistic.deleteMany();
+    const qtUserTotal = await User.find().count(); 
+    const qtUserTotalActivo=await User.find({active:"true"}).count() 
+    const qtUserTotalInactivo=await User.find({active:"false"}).count() 
+    const qtUserTotalFornecedor= await User.find({'role.perfilCode':1}).count() 
+    const qtUserActivoFornecedor = await User.find({'role.perfilCode':1, active:"true"}).count()
+    const qtUserInactivoFornecedor = await User.find({'role.perfilCode':1, active:"false"}).count()
+    const qtUserTotalCliente= await User.find({'role.perfilCode':2}).count()
+    const qtUserActivoCliente = await User.find({'role.perfilCode':2, active:"true"}).count()
+    const qtUserInactivoCliente = await await User.find({'role.perfilCode':2, active:"false"}).count()
+
+   await  UserStatistic.create({
+        qtUserTotal:qtUserTotal,
+        qtUserTotalActivo:qtUserTotalActivo,
+        qtUserTotalInactivo:qtUserTotalInactivo,
+        qtUserTotalFornecedor:qtUserTotalFornecedor,
+        qtUserActivoFornecedor:qtUserActivoFornecedor,
+        qtUserInactivoFornecedor:qtUserInactivoFornecedor,
+        qtUserTotalCliente:qtUserTotalCliente,
+        qtUserActivoCliente:qtUserActivoCliente,
+        qtUserInactivoCliente:qtUserInactivoCliente
+      })
+}
+
+userSchema.post('save', async function(next){
+    StatisticUser() 
+}); 
+    
+userSchema.post(/^find/, async function(next){
+    StatisticUser(); 
+}); 
 
 const User = mongoose.model('users', userSchema);
 

@@ -11,7 +11,7 @@ router
     .post(solicitacaoController.validateData, solicitacaoController.createSolicitacao);
 
 router
-    .route('/MySolicitacaos') 
+    .route('/MySolicitacoes') 
     .get(solicitacaoController.getMySolicitations, solicitacaoController.getAllSolicitacao)   
 
 router.use(authController.restrictTo(0, 1))

@@ -6,7 +6,8 @@ const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 // const sendEmail = require('./../utils/email');
 const Email = require('./../utils/email');
-
+const factory = require('./handlerFactory');
+const ErrorMessage= require('./../utils/error')
 
   const signToken = id => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -44,7 +45,7 @@ const Email = require('./../utils/email');
   exports.siginup = catchAsync(async (req, res, next) => {
     
     if((req.body.role*1) === 0) //Não é permitido cadastrar-se como admin
-      return next(new AppError('Perfil Invalido', 500));
+      return next(new AppError(ErrorMessage[0].message, 500));
 
     const newUser = await User.create({
         name            : req.body.name,
@@ -62,7 +63,7 @@ const Email = require('./../utils/email');
 
     // if(false) 
     await new Email(newUser, url).sendWelcome();
-
+    factory.createLogs(newUser._id,User,null,newUser,req.method);
     createSendToken(newUser, 201, res);
   })
 
@@ -70,7 +71,7 @@ const Email = require('./../utils/email');
     const { email, password, telemovel } = req.body;
 
     if (!password){
-        return next(new AppError('Please provide email and password!', 400));
+        return next(new AppError(ErrorMessage[2].message, 400));
     }
 
     let user = null;
@@ -79,11 +80,11 @@ const Email = require('./../utils/email');
     else if(telemovel)
       user = await User.findOne({ telemovel }).select('+password');
     else 
-      return next(new AppError('Please provide email and password!', 400));
+      return next(new AppError(ErrorMessage[3].message, 400));
       
     if (!user || !(await user.correctPassword(password, user.password)))
-        return next(new AppError('Please provide email and password!', 400));
-    
+        return next(new AppError(ErrorMessage[4].message, 400));
+    factory.createLogs(user._id,User,user,null,"Login");
     createSendToken(user, 200, res);
   });
 
@@ -99,7 +100,7 @@ const Email = require('./../utils/email');
   
     if (!token) {
       return next(
-        new AppError('You are not logged in! Please log in to get access.', 401)
+        new AppError(ErrorMessage[5].message, 401)
       );
     }
   
@@ -110,17 +111,14 @@ const Email = require('./../utils/email');
     const currentUser = await User.findById(decoded.id);
     if (!currentUser) {
       return next(
-        new AppError(
-          'The user belonging to this token does no longer exist.',
-          401
-        )
+        new AppError(ErrorMessage[6].message,401)
       );
     }
   
     // 4) Check if user changed password after the token was issued
     if((await currentUser.changedPasswordAfter(decoded.iat))) {
       return next(
-        new AppError('User recently changed password! Please log in again.', 401)
+        new AppError(ErrorMessage[7].message, 401)
       );
     }
   
@@ -133,7 +131,7 @@ const Email = require('./../utils/email');
   exports.restrictTo = (...roles) => {
       return (req, res, next) => {
           if(!roles.includes(req.user.role.perfilCode)){
-              return next(new AppError('You do not have permission to perform this action', 403))
+              return next(new AppError(ErrorMessage[8].message, 403))
           }
           next();
       }
@@ -143,7 +141,7 @@ const Email = require('./../utils/email');
     // 1) Get user based on POST email
     const user = await User.findOne({ email: req.body.email });
     if(!user) {
-      return next(new AppError('There is no user with email address.', 404));
+      return next(new AppError(ErrorMessage[9].message, 404));
     }
 
     // 2) Generate the random reset token
@@ -165,7 +163,7 @@ const Email = require('./../utils/email');
       user.passwordResetExpires = undefined;
       await user.save({ validateBeforeSave: false })
 
-      return next(new AppError('There was an error sending the email. Try again later!'), 500)
+      return next(new AppError(ErrorMessage[1].message), 500)
     }
   })
 
@@ -179,7 +177,7 @@ const Email = require('./../utils/email');
     
     // 2) If token has not expired, and there is user, set the new password
     if(!user) {
-      return next(new AppError('Token is invalid or has expired', 400))
+      return next(new AppError(ErrorMessage[10].message, 400))
     }
     user.password = req.body.password;
     user.passwordConfirm = req.body.passwordConfirm;
@@ -190,6 +188,7 @@ const Email = require('./../utils/email');
     // 3) Update changedPasswordAt property for the user => There is one document middleware to perform this operation 
 
     // 4) Log the user in, send JWT
+    factory.createLogs(user._id,User,old_doc,user,"Reset Password");
     createSendToken(user, 200, res);
   });
 
@@ -199,7 +198,7 @@ const Email = require('./../utils/email');
 
     // 2) Check if POSTed current password is correct
     if(!(await user.correctPassword(req.body.passwordCurrent, user.password))){
-      return next(new AppError('Your current password is wrong', 401))
+      return next(new AppError(ErrorMessage[11].message, 401))
     }
 
     // 3) If SourceBuffer, update password
@@ -208,5 +207,6 @@ const Email = require('./../utils/email');
     await user.save();
 
     // 4) Log user in, send JWT 
+    factory.createLogs(req.user.id,User,old_doc,new_doc,"Update Password");
     createSendToken(user, 200, res);
   });

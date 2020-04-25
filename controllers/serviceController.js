@@ -4,14 +4,14 @@ const Service       = require('./../models/servicoModel');
 const factory       = require('./handlerFactory')
 const AppError      = require('./../utils/appError');
 const catchAsync    = require('./../utils/catchAsync');
-
+const ErrorMessage  = require('./../utils/error')
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) =>{
     if(file.mimetype.startsWith('image'))
         cb(null, true)
     else
-        cb(new AppError('Only images ara allowed', 400), false);
+        cb(new AppError(ErrorMessage[14].message, 400), false);
 }
 
 const upload = multer({
@@ -89,7 +89,7 @@ const isRequiredFields = (obj, ...reqFields)=>{
 exports.validateFilds = (req, res, next) => {
 
     if(!isRequiredFields(req.body, 'nome', 'endereco', 'pacote', 'fornecedor', 'coverImage', 'categoria'))
-        return next(new AppError('Missing Required Fields', 400));
+        return next(new AppError(ErrorMessage[15].message, 400));
 
     const fieldsBody = Object.keys(req.body);
     
@@ -108,7 +108,7 @@ exports.validateFilds = (req, res, next) => {
         return next();
     }
 
-    if(!fieldsBody.includes('price')) return next(new AppError('Missing Required Fields', 400));
+    if(!fieldsBody.includes('price')) return next(new AppError(ErrorMessage[15].message, 400));
 
     next();
 }
@@ -129,7 +129,7 @@ exports.getServicesWithin = catchAsync(async (req, res, next) => {
     const [latitude, longitude] = coordenates.split(',');
     
     if(!latitude || !longitude){
-        return next(new AppError('Por favor, adicione latitude e longitude'))
+        return next(new AppError(ErrorMessage[20].message))
     }
 
     const radius = distance/6378.1;  
@@ -155,7 +155,7 @@ exports.getServicesDistances = catchAsync(async (req, res, next) => {
     const [latitude, longitude] = coordenates.split(',');
     
     if(!latitude || !longitude){
-        return next(new AppError('Por favor, adicione latitude e longitude'))
+        return next(new AppError(ErrorMessage[20].message))
     }
 
     const services = await Service.aggregate([

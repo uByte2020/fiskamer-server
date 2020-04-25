@@ -17,6 +17,8 @@ const solicitacaoRouter     = require('./routes/solicitacaoRouter');
 const favoriteServiceRoutes = require('./routes/favoriteServiceRoutes');
 const planejamentoRoutes    = require('./routes/planejamentoRoutes');
 const commentRoutes         = require('./routes/commentRoutes');
+const statisticRouter       = require('./routes/statisticsRoutes')
+const logsRouter            = require('./routes/logRoutes');
 const AppError              = require('./utils/appError')
 const globalHandlerError    = require('./controllers/errorController')
 
@@ -53,10 +55,12 @@ app.use('/api/v1/categories'       , categoryRouter        );
 app.use('/api/v1/estados'          , stateRouter           );
 app.use('/api/v1/packages'         , packageRouter         );
 app.use('/api/v1/services'         , serviceRouter         );
-app.use('/api/v1/solicitacaos'     , solicitacaoRouter     );
-app.use('/api/v1/favouriteServices', favoriteServiceRoutes );
+app.use('/api/v1/solicitacoes'     , solicitacaoRouter     );
+app.use('/api/v1/favoriteServices' , favoriteServiceRoutes );
 app.use('/api/v1/planejamentos'    , planejamentoRoutes    );
 app.use('/api/v1/comments'         , commentRoutes         );
+app.use('/api/v1/statistics'       , statisticRouter       );
+app.use('/api/v1/logs'             , logsRouter            );
 
 app.all('*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404))

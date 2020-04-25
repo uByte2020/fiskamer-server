@@ -1,12 +1,18 @@
 const mongoose = require('mongoose');
 
 const logSchema = new mongoose.Schema({
-    registro:{
+    new_registro:{
         type: String,
-        required: [true, 'Um log deve ter uma registro']
+        default:' '
+              
+    },
+    old_registro:{
+        type: String,
+       
     },
     user: {
         type: mongoose.Schema.ObjectId,
+        required: [true, 'Um log deve ter um user'],
         ref: 'User' 
     },
     operacao:{

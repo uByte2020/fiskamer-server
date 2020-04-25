@@ -1,0 +1,98 @@
+[
+   {
+       "message": "Perfil inválido"
+   },
+
+   {
+       "message": "Ocorreu algum erro no envio de email. Por favor, tente mais tarde!"
+   },
+
+   {
+       "message": "Insira a Senha"
+   },
+
+   {
+        "message": "Insira o Email ou Telemóvel"
+   },
+
+   {
+        "message": "Email ou Senha inválida"
+   },
+
+   {
+        "message": "Você não está com a sessão iniciada. Por favor, inicie sessão"
+   },
+  
+   {
+        "message": "O utilizador a quem o token pertence já não existe"
+   },
+   
+   {
+        "message": "O utilizador alterou a senha recentemente! Por favor, inicie sessão de novo"
+   },
+
+   {
+        "message": "Você não tem permissão para efectuar esta acção"
+   },
+
+   {
+        "message": "Não existe utilizador com este endereço de email"
+   },
+
+   {
+        "message": "Token inválido ou expirado"
+   },
+
+   {
+        "message": "A senha actual está incorreta"
+   },
+
+   {
+        "message": "Não há serviço para ser adicionado"
+   },
+
+   {
+        "message": "Não foi encontrado documento com este id"
+   },
+
+   {
+        "message": "Apenas imagens são permitidas"
+   },
+
+   {
+        "message": "Está faltando campos obrigatórios"
+   },
+   
+   {
+        "message": "Esta rota não é para actualização de senha. Por favor utilize /updateMyPassword"
+   },
+
+   {
+        "message": "Está faltando campos"
+   },
+
+   {
+        "message": "Token inválido! Por favor, faça login novamente"
+   },
+
+   {
+        "message": "Token expirado! Por favor, faça login novamente"
+   },
+
+   {
+        "message":"Por favor, adicione latitude e longitude"
+   },
+
+   {
+        "message":"Está faltando categoria"
+   },
+
+   {
+       "message":"Está faltando estado"
+   },
+ 
+   {
+        "message":"Está faltando pacote"
+   }
+
+]

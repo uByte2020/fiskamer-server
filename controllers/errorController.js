@@ -1,5 +1,5 @@
 const AppError = require('./../utils/appError')
-
+const ErrorMessage= require('./../utils/error')
 const handleCastErrorDB = err => {
     const message = `Invalid ${err.path}: ${err.value}.`;
     return new AppError(message, 400)
@@ -18,11 +18,11 @@ const handleValidationErrorDB = err => {
 }
 
 const handleJsonWebTokenError = () => {
-    return new AppError('Invalid token. Please log in again.', 401)
+    return new AppError(ErrorMessage[18].message, 401)
 }
 
 const handleTokenExpiredError = () => {
-    return new AppError('Your token was expired. Please log in again.', 401)
+    return new AppError(ErrorMessage[19].message, 401)
 }
 
 const sendErrorDev = (err, res)=>{
