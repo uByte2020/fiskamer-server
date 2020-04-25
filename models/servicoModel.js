@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 const mongoose = require('mongoose');
 const Estado = require('./estadoModel');
 const Categoria = require('./categoriaModel');
@@ -6,6 +7,7 @@ const AppError = require('./../utils/appError');
 const ServiceStatistic = require('./serviceStatisticModel');
 const ProviderStatistic = require('./fornecedorStatisticModel');
 const ErrorMessage = require('./../utils/error');
+
 const servicoSchema = new mongoose.Schema({
   nome: {
     type: String,
@@ -46,7 +48,7 @@ const servicoSchema = new mongoose.Schema({
   pagamentos: [
     {
       type: mongoose.Schema.ObjectId,
-      ref: 'Pagamento'
+      ref: 'pagamentos'
       // required: true
     }
   ],
@@ -70,9 +72,10 @@ const servicoSchema = new mongoose.Schema({
       default: 'Point',
       enum: ['Point']
     },
-    coordinates: [Number],
-    address: String,
-    description: String
+    coordinates: {
+      type: [Number],
+      default: [-80.185942, 25.774772]
+    }
   },
   createdAt: {
     type: Date,
@@ -95,22 +98,23 @@ servicoSchema.pre('save', async function(next) {
   next();
 });
 
-servicoSchema.pre(/^find/, async function(next) {
-  this.populate({ path: 'fornecedor' });
-  next();
-});
 const createServiceStatistic = async function() {
   await ServiceStatistic.deleteMany();
+
   const qtServiceTotal = await Servico.find().count();
+
   const qtServiceActivo = await Servico.find({
     'estado.estadoCode': 1
   }).count();
+
   const qtServicePendente = await Servico.find({
     'estado.estadoCode': 0
   }).count();
+
   const qtServiceVencido = await Servico.find({
     'estado.estadoCode': 6
   }).count(); //Serviços com prazo de divulgação vencido
+
   const ocorrenciaCategoria = await Servico.aggregate([
     {
       $match: {
@@ -192,6 +196,11 @@ servicoSchema.post('save', async function(next) {
 servicoSchema.post(/^find/, async function(Servico, next) {
   createServiceStatistic();
   createFornecedorStatistic(Servico.fornecedor);
+});
+
+servicoSchema.pre(/^find/, async function(next) {
+  this.populate({ path: 'fornecedor' });
+  next();
 });
 
 const Servico = mongoose.model('servicos', servicoSchema);
