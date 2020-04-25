@@ -24,7 +24,7 @@ router.patch('/updateMe',
 router.delete('/deleteMe', userController.deleteMe);
 router.get('/me', userController.getMe, userController.getUser);
 
-router.use(authController.restrictTo(0))
+//router.use(authController.restrictTo(0))
 
 router.use('/:clientId/solicitacaos', solicitacaoRouter) 
 router.use('/:userId/favourites', favoriteServiceRoutes) 

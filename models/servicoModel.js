@@ -7,11 +7,11 @@ const AppError = require('./../utils/appError');
 const servicoSchema = new mongoose.Schema({
     nome:{
         type: String,
-        required: [true, 'Um Serviço deve ter um nome'],
-        unique: true
+        required: [true, 'Um Serviço deve ter um nome']
     },
     descricao:{
         type: String,
+        default: ''
     },
     coverImage:{
         type: String,
@@ -38,7 +38,7 @@ const servicoSchema = new mongoose.Schema({
     },
     fornecedor:{ 
         type: mongoose.Schema.ObjectId,
-        ref: 'User',
+        ref: 'users',
         required: true
     },
     pagamentos:[
@@ -93,6 +93,11 @@ servicoSchema.pre('save', async function(next){
     if(!this.pacote) 
         return next(new AppError('Missing pacote', 400));
     
+    next();
+})
+
+servicoSchema.pre(/^find/, async function(next){
+    this.populate({path: 'fornecedor'});
     next();
 })
 
