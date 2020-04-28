@@ -1,46 +1,52 @@
-const express               = require('express')
-const serviceController     = require('./../controllers/serviceController')
-const authController        = require('./../controllers/authController')
-const solicitacaoRouter     = require('./solicitacaoRouter') 
+const express = require('express');
+const serviceController = require('./../controllers/serviceController');
+const authController = require('./../controllers/authController');
+const solicitacaoRouter = require('./solicitacaoRouter');
 const favoriteServiceRoutes = require('./favoriteServiceRoutes');
-const commentRoutes         = require('./commentRoutes');
+const commentRoutes = require('./commentRoutes');
 
-const router = express.Router();
-
-router
-    .route('/')
-    .get(serviceController.getAllServices)
+const router = express.Router({ mergeParams: true });
 
 router
-    .route('/:id')
-    .get(serviceController.getService)
-    
-router
-    .route('/within/:distance/center/:coordenates')
-    .get(serviceController.getServicesWithin)
+  .route('/')
+  .get(
+    serviceController.getSerciveByFornecedor,
+    serviceController.getAllServices
+  );
+
+router.route('/:id').get(serviceController.getService);
 
 router
-    .route('/distances/:coordenates')
-    .get(serviceController.getServicesDistances)
-
-router.use(authController.protect)
-
-router.use('/:servicoId/solicitacaos', solicitacaoRouter) 
-router.use('/:servicoId/favourites', favoriteServiceRoutes) 
-router.use('/:servicoId/comments', commentRoutes) 
-
-router.use(authController.restrictTo(0, 1))
+  .route('/within/:distance/center/:coordenates')
+  .get(serviceController.getServicesWithin);
 
 router
-    .route('/')    
-    .post(serviceController.validateFilds, serviceController.verifyPayment, serviceController.createService)      
-    
+  .route('/distances/:coordenates')
+  .get(serviceController.getServicesDistances);
+
+router.use(authController.protect);
+
+router.use('/:servicoId/solicitacaos', solicitacaoRouter);
+router.use('/:servicoId/favourites', favoriteServiceRoutes);
+router.use('/:servicoId/comments', commentRoutes);
+
+router.use(authController.restrictTo(0, 1));
+
 router
-    .route('/:id')  
-    .patch(
-        serviceController.uploadServicePhoto,
-        serviceController.resizeServicePhoto,
-        serviceController.updateService)
-    .delete(serviceController.deleteService)
+  .route('/')
+  .post(
+    serviceController.validateFilds,
+    serviceController.verifyPayment,
+    serviceController.createService
+  );
+
+router
+  .route('/:id')
+  .patch(
+    serviceController.uploadServicePhoto,
+    serviceController.resizeServicePhoto,
+    serviceController.updateService
+  )
+  .delete(serviceController.deleteService);
 
 module.exports = router;

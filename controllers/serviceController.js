@@ -184,6 +184,11 @@ exports.getServicesDistances = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getSerciveByFornecedor = (req, res, next) => {
+  if (req.params.fornecedorId) req.query.fornecedor = req.params.fornecedorId;
+  next();
+};
+
 exports.getService = factory.getOne(Service);
 exports.getAllServices = factory.getAll(Service);
 exports.createService = factory.createOne(Service);
