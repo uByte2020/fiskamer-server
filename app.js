@@ -35,12 +35,14 @@ app.use(
 
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 
-const limiter = rateLimit({
-  max: 100,
-  windowMs: 3600 * 1000,
-  message: 'Too many requests from this IP, please try again in an hour!'
-});
-app.use('/api', limiter);
+if (process.env.NODE_ENV === 'production') {
+  const limiter = rateLimit({
+    max: 100,
+    windowMs: 3600 * 1000,
+    message: 'Too many requests from this IP, please try again in an hour!'
+  });
+  app.use('/api', limiter);
+}
 
 app.use(express.json());
 
