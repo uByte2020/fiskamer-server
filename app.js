@@ -26,7 +26,12 @@ const globalHandlerError = require('./controllers/errorController');
 const app = express();
 
 app.use(helmet());
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:8080',
+    credentials: true
+  })
+);
 
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 
@@ -38,6 +43,7 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 app.use(express.json());
+
 app.use(cookieParser());
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
@@ -51,8 +57,6 @@ app.use(hpp());
 app.use(express.static(`${__dirname}/public`));
 
 app.use((req, res, next) => {
-  console.log(req.cookies);
-  console.log(req.signedCookies);
   next();
 });
 
