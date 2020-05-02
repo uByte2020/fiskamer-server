@@ -1,5 +1,6 @@
 const Planejamento = require('../models/planejamentoModel');
 const Solicitacao = require('../models/solicitacaoModel');
+const Servico = require('../models/servicoModel');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
 const AppError = require('./../utils/appError');
@@ -56,14 +57,17 @@ exports.validateData = catchAsync(async (req, res, next) => {
     cliente: req.body.cliente
   };
   req.body.solicitacoes = [];
-
+  const prices = [];
   await Promise.all(
     req.body.servicos.map(async servico => {
       solicitacaoTemp.servico = servico;
+      prices.push((await Servico.findById(servico)) || 0);
       const solicitacaoId = await Solicitacao.create(solicitacaoTemp);
       req.body.solicitacoes.push(solicitacaoId._id);
     })
   );
+
+  req.body.price = prices.reduce((total, price) => total + price, 0);
 
   next();
 });

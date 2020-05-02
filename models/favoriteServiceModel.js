@@ -31,6 +31,7 @@ favoriteServiceSchema.pre(/^find/, async function(next) {
   });
   next();
 });
+
 favoriteServiceSchema.post(/^find/, async function(next) {
   await StatisticFvorite.deleteMany();
   const ocorrenciaFavoritos = await FavoriteService.aggregate([
@@ -42,6 +43,7 @@ favoriteServiceSchema.post(/^find/, async function(next) {
   await StatisticFvorite.create({
     ocorrenciaFavoritos: ocorrenciaFavoritos
   });
+  next();
 });
 
 const FavoriteService = mongoose.model(

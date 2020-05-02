@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
 
-const commentSchema = new mongoose.Schema({
-  comment: {
+const reacaoSchema = new mongoose.Schema({
+  tipo: {
     type: String,
-    required: true,
-    trim: true
+    enum: ['like', 'not-like']
   },
   servico: {
     type: mongoose.Schema.ObjectId,
@@ -23,11 +22,11 @@ const commentSchema = new mongoose.Schema({
   }
 });
 
-commentSchema.pre(/^find/, async function(next) {
+reacaoSchema.pre(/^find/, async function(next) {
   this.populate('servico').populate('user');
   next();
 });
 
-const Comment = mongoose.model('comments', commentSchema);
+const Reacao = mongoose.model('reacoes', reacaoSchema);
 
-module.exports = Comment;
+module.exports = Reacao;

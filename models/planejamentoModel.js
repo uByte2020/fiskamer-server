@@ -22,6 +22,10 @@ const planejamentoSchema = new mongoose.Schema({
       default: []
     }
   ],
+  price: {
+    type: Number,
+    default: 0
+  },
   createdAt: {
     type: Date,
     default: Date.now(),

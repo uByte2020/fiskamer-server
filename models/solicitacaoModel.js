@@ -110,10 +110,10 @@ solicitacaoSchema.post('save', async function(next) {
   createFornecedorStatistic(this.servico);
 });
 
-solicitacaoSchema.post(/^find/, async function(Solicitacao, next) {
-  createStatisticSolicitacao();
-  createFornecedorStatistic(Solicitacao.servico);
-});
+// solicitacaoSchema.post(/^find/, async function(Solicitacao, next) {
+//   createStatisticSolicitacao();
+//   createFornecedorStatistic(Solicitacao.servico);
+// });
 
 const Solicitacao = mongoose.model('solicitacoes', solicitacaoSchema);
 

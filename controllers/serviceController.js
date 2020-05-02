@@ -1,9 +1,11 @@
 const multer = require('multer');
 const sharp = require('sharp');
 const Service = require('./../models/servicoModel');
+const Reacao = require('./../models/reactionModel');
 const factory = require('./handlerFactory');
 const AppError = require('./../utils/appError');
 const catchAsync = require('./../utils/catchAsync');
+const APIFeatures = require('./../utils/apiFeatures');
 const ErrorMessage = require('./../utils/error');
 
 const multerStorage = multer.memoryStorage();
@@ -94,8 +96,9 @@ exports.validateFilds = (req, res, next) => {
       'coverImage',
       'categoria'
     )
-  )
+  ) {
     return next(new AppError(ErrorMessage[15].message, 400));
+  }
 
   const fieldsBody = Object.keys(req.body);
 
@@ -108,7 +111,8 @@ exports.validateFilds = (req, res, next) => {
         newFeatures.push(filterObj(fe, 'feature', 'price'));
     });
 
-    req.body.price = null;
+    req.body.price =
+      req.body.price || newFeatures.reduce((total, current) => total + current);
     req.body.features = newFeatures;
 
     return next();
@@ -153,6 +157,26 @@ exports.getServicesWithin = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getServicesbyCategoria = catchAsync(async (req, res, next) => {
+  const features = new APIFeatures(
+    Service.find({ 'categoria.categoria': req.params.categoria }),
+    req.query
+  )
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const docs = await features.query;
+
+  res.status(200).json({
+    status: 'success',
+    results: docs.length,
+    data: {
+      docs
+    }
+  });
+});
+
 // '/distance/:coordenates'
 exports.getServicesDistances = catchAsync(async (req, res, next) => {
   const { coordenates } = req.params;
@@ -188,6 +212,30 @@ exports.getSerciveByFornecedor = (req, res, next) => {
   if (req.params.fornecedorId) req.query.fornecedor = req.params.fornecedorId;
   next();
 };
+
+exports.like = catchAsync(async (req, res, next) => {
+  const servico = await Service.findById(req.params.id).select('like');
+  let reacao = await Reacao.findOne({
+    user: req.user.id,
+    servico: req.params.id
+  });
+
+  if (!reacao) {
+    reacao = { user: req.user.id, servico: req.params.id };
+    reacao.tipo = 'like';
+    req.body.like = servico.like + 1;
+    await Reacao.create(reacao);
+    next();
+  }
+
+  reacao.tipo = reacao.tipo === 'like' ? 'not-like' : 'like';
+  if (reacao.tipo === 'like') req.body.like = servico.like + 1;
+  else req.body.like = servico.like - 1;
+
+  await Reacao.findByIdAndUpdate(reacao._id, reacao);
+
+  next();
+});
 
 exports.getService = factory.getOne(Service);
 exports.getAllServices = factory.getAll(Service);

@@ -1,5 +1,7 @@
 const Solicitacao = require('../models/solicitacaoModel');
 const factory = require('./handlerFactory');
+const APIFeatures = require('./../utils/apiFeatures');
+const catchAsync = require('./../utils/catchAsync');
 
 exports.getMySolicitations = (req, res, next) => {
   req.query.cliente = req.user.id;
@@ -18,6 +20,29 @@ exports.validateData = (req, res, next) => {
   req.body.estado = 3;
   next();
 };
+
+exports.getClientesByFornecedor = catchAsync(async (req, res, next) => {
+  const features = new APIFeatures(Solicitacao.find(), req.query)
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const docsTemp = await features.query;
+
+  const docs = docsTemp
+    .filter(doc => {
+      return doc.servico.fornecedor._id.toString() === req.params.fornecedoId;
+    })
+    .map(doc => doc.cliente);
+
+  res.status(200).json({
+    status: 'success',
+    results: docs.length,
+    data: {
+      docs
+    }
+  });
+});
 
 exports.getSolicitacao = factory.getOne(Solicitacao);
 exports.getAllSolicitacao = factory.getAll(Solicitacao);

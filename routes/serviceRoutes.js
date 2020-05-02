@@ -24,11 +24,19 @@ router
   .route('/distances/:coordenates')
   .get(serviceController.getServicesDistances);
 
+router
+  .route('/byCategoria/:categoria')
+  .get(serviceController.getServicesbyCategoria);
+
 router.use(authController.protect);
 
 router.use('/:servicoId/solicitacaos', solicitacaoRouter);
 router.use('/:servicoId/favourites', favoriteServiceRoutes);
 router.use('/:servicoId/comments', commentRoutes);
+
+router
+  .route('/:id/like')
+  .patch(serviceController.like, serviceController.updateService);
 
 router.use(authController.restrictTo(0, 1));
 

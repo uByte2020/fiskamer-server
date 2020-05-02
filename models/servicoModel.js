@@ -19,7 +19,7 @@ const servicoSchema = new mongoose.Schema({
   },
   coverImage: {
     type: String,
-    default: ''
+    default: 'default.jpg'
   },
   images: {
     type: [String]
@@ -65,6 +65,10 @@ const servicoSchema = new mongoose.Schema({
     default: 4.5,
     max: 5,
     min: 1
+  },
+  like: {
+    type: Number,
+    default: 0
   },
   location: {
     type: {
