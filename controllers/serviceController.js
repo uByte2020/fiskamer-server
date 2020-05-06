@@ -233,7 +233,6 @@ exports.like = catchAsync(async (req, res, next) => {
   else req.body.like = servico.like - 1;
 
   await Reacao.findByIdAndUpdate(reacao._id, reacao);
-
   next();
 });
 

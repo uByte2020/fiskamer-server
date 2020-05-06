@@ -81,6 +81,23 @@ const servicoSchema = new mongoose.Schema({
       default: [-80.185942, 25.774772]
     }
   },
+  capacidade: {
+    type: Number,
+    default: 0
+  },
+  compartimentos: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  questoes: {
+    type: [
+      {
+        questao: String,
+        resposta: String
+      }
+    ]
+  },
   createdAt: {
     type: Date,
     default: Date.now(),

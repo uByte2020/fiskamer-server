@@ -5,11 +5,25 @@ const categoriaSchema = new mongoose.Schema({
     type: String,
     required: [true, 'A Categoria deve ter uma descrição']
   },
+  subCategorias: {
+    type: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'subCategorias'
+      }
+    ],
+    default: []
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
     select: false
   }
+});
+
+categoriaSchema.pre(/^find/, async function(next) {
+  this.populate('subCategorias');
+  next();
 });
 
 const Categoria = mongoose.model('categorias', categoriaSchema);

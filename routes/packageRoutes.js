@@ -1,17 +1,30 @@
-const express= require('express')
-const packageController    = require('./../controllers/packageController')
-const authController    = require('./../controllers/authController')
+const express = require('express');
+const packageController = require('./../controllers/packageController');
+const authController = require('./../controllers/authController');
 
 const router = express.Router();
 
 router
-    .route('/')
-    .get(authController.protect,packageController.getAllPackage)      
-    .post(authController.protect,packageController.createPackage)      
-    
+  .route('/')
+  .get(packageController.getAllPackage)
+  .post(
+    authController.protect,
+    authController.restrictTo(0),
+    packageController.createPackage
+  );
+
 router
-    .route('/:id')
-    .patch(authController.protect,packageController.updatePackage)
-    .delete(authController.protect,packageController.deletePackage)
+  .route('/:id')
+  .get(packageController.getPackage)
+  .patch(
+    authController.protect,
+    authController.restrictTo(0),
+    packageController.updatePackage
+  )
+  .delete(
+    authController.protect,
+    authController.restrictTo(0),
+    packageController.deletePackage
+  );
 
 module.exports = router;
