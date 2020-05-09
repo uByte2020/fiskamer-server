@@ -236,6 +236,48 @@ exports.like = catchAsync(async (req, res, next) => {
   next();
 });
 
+exports.addDisponibilidade = catchAsync(async (req, res, next) => {
+  if (!req.params.id || !req.body.disponibilidades)
+    return next(new AppError(ErrorMessage[12].message, 400));
+
+  const doc = await Service.findOneAndUpdate(
+    { _id: req.params.id },
+    { $addToSet: { disponibilidades: req.body.disponibilidades } },
+    {
+      new: true, //Para devolver o documento actualizado
+      runValidators: true,
+      upsert: true
+    }
+  );
+  res.status(200).json({
+    status: 'success',
+    data: {
+      data: doc
+    }
+  });
+});
+
+exports.removeDisponibilidade = catchAsync(async (req, res, next) => {
+  if (!req.params.id || !req.body.disponibilidade)
+    return next(new AppError(ErrorMessage[12].message, 400));
+
+  const doc = await Service.findOneAndUpdate(
+    { _id: req.params.id },
+    { $pull: { disponibilidades: req.body.disponibilidade } },
+    {
+      new: true, //Para devolver o documento actualizado
+      runValidators: true
+    }
+  );
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      data: doc
+    }
+  });
+});
+
 exports.getService = factory.getOne(Service);
 exports.getAllServices = factory.getAll(Service);
 exports.createService = factory.createOne(Service);

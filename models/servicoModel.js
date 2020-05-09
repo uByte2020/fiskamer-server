@@ -96,7 +96,7 @@ const servicoSchema = new mongoose.Schema({
       }
     ]
   },
-  disponibilidade: {
+  disponibilidades: {
     type: [Date],
     default: []
   },

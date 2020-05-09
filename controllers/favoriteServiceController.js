@@ -9,10 +9,11 @@ exports.addToFavorites = catchAsync(async (req, res, next) => {
 
   if (!req.body.servico)
     return next(new AppError(ErrorMessage[12].message, 400));
+
   const oldDoc = await FavoriteService.find({ user: req.user.id });
   const doc = await FavoriteService.findOneAndUpdate(
     { user: req.user.id },
-    { $push: { servicos: req.body.servico } },
+    { $addToSet: { servicos: req.body.servico } },
     {
       new: true, //Para devolver o documento actualizado
       runValidators: true,
@@ -34,7 +35,7 @@ exports.addToFavorites = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.removeFromFavorites = catchAsync(async (req, res) => {
+exports.removeFromFavorites = catchAsync(async (req, res, next) => {
   if (req.params.servicoId) req.body.servico = req.params.servicoId;
   const oldDoc = await FavoriteService.find({ user: req.user.id });
   const doc = await FavoriteService.findOneAndUpdate(

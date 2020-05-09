@@ -41,6 +41,11 @@ router
 router.use(authController.restrictTo(0, 1));
 
 router
+  .route('/:id/disponibilidades')
+  .patch(serviceController.addDisponibilidade)
+  .delete(serviceController.removeDisponibilidade);
+
+router
   .route('/')
   .post(
     serviceController.validateFilds,
