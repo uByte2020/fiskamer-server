@@ -5,7 +5,6 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const Perfil = require('./perfilModel');
 const AppError = require('./../utils/appError');
-const UserStatistic = require('./userStatisticModel');
 const ErrorMessage = require('./../utils/error');
 // mongoose.set('useFindAndModify', false);
 
@@ -145,53 +144,6 @@ userSchema.methods.createPasswordResetToken = async function() {
 
   return resetToken;
 };
-
-const StatisticUser = async function() {
-  await UserStatistic.deleteMany();
-  const qtUserTotal = await User.find().count();
-  const qtUserTotalActivo = await User.find({ active: 'true' }).count();
-  const qtUserTotalInactivo = await User.find({ active: 'false' }).count();
-  const qtUserTotalFornecedor = await User.find({
-    'role.perfilCode': 1
-  }).count();
-  const qtUserActivoFornecedor = await User.find({
-    'role.perfilCode': 1,
-    active: 'true'
-  }).count();
-  const qtUserInactivoFornecedor = await User.find({
-    'role.perfilCode': 1,
-    active: 'false'
-  }).count();
-  const qtUserTotalCliente = await User.find({ 'role.perfilCode': 2 }).count();
-  const qtUserActivoCliente = await User.find({
-    'role.perfilCode': 2,
-    active: 'true'
-  }).count();
-  const qtUserInactivoCliente = await await User.find({
-    'role.perfilCode': 2,
-    active: 'false'
-  }).count();
-
-  await UserStatistic.create({
-    qtUserTotal: qtUserTotal,
-    qtUserTotalActivo: qtUserTotalActivo,
-    qtUserTotalInactivo: qtUserTotalInactivo,
-    qtUserTotalFornecedor: qtUserTotalFornecedor,
-    qtUserActivoFornecedor: qtUserActivoFornecedor,
-    qtUserInactivoFornecedor: qtUserInactivoFornecedor,
-    qtUserTotalCliente: qtUserTotalCliente,
-    qtUserActivoCliente: qtUserActivoCliente,
-    qtUserInactivoCliente: qtUserInactivoCliente
-  });
-};
-
-userSchema.post('save', async function(next) {
-  StatisticUser();
-});
-
-userSchema.post(/^find/, async function(next) {
-  StatisticUser();
-});
 
 const User = mongoose.model('users', userSchema);
 
