@@ -2,11 +2,12 @@ const fs = require('fs');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const Categoria = require('./../models/categoriaModel');
-const Estado    = require('./../models/estadoModel');
-const Pacote    = require('./../models/pacoteModel');
-const Perfil    = require('./../models/perfilModel');
-const Servico   = require('./../models/servicoModel');
-const User      = require('./../models/userModel');
+const Estado = require('./../models/estadoModel');
+const Pacote = require('./../models/pacoteModel');
+const Perfil = require('./../models/perfilModel');
+const Servico = require('./../models/servicoModel');
+const User = require('./../models/userModel');
+const SubCategoria = require('./../models/subCategoriaModel');
 
 dotenv.config({ path: './config.env' });
 
@@ -28,29 +29,46 @@ mongoose
   .then(() => console.log('DB connection successful!'));
 
 // READ JSON FILE
-const categorias  = JSON.parse(fs.readFileSync(`${__dirname}/categorias.json`, 'utf-8'));
-const estados     = JSON.parse(fs.readFileSync(`${__dirname}/estados.json`, 'utf-8'));
-const pacotes     = JSON.parse(fs.readFileSync(`${__dirname}/pacotes.json`, 'utf-8'));
-const perfis      = JSON.parse(fs.readFileSync(`${__dirname}/perfils.json`, 'utf-8'));
-const servicos    = JSON.parse(fs.readFileSync(`${__dirname}/servicos.json`, 'utf-8'));
-const users       = JSON.parse(fs.readFileSync(`${__dirname}/users.json`, 'utf-8'));
+const categorias = JSON.parse(
+  fs.readFileSync(`${__dirname}/categorias.json`, 'utf-8')
+);
+const subSategorias = JSON.parse(
+  fs.readFileSync(`${__dirname}/subCategorias.json`, 'utf-8')
+);
+const estados = JSON.parse(
+  fs.readFileSync(`${__dirname}/estados.json`, 'utf-8')
+);
+const pacotes = JSON.parse(
+  fs.readFileSync(`${__dirname}/pacotes.json`, 'utf-8')
+);
+const perfis = JSON.parse(
+  fs.readFileSync(`${__dirname}/perfils.json`, 'utf-8')
+);
+const servicos = JSON.parse(
+  fs.readFileSync(`${__dirname}/servicos.json`, 'utf-8')
+);
+const users = JSON.parse(fs.readFileSync(`${__dirname}/users.json`, 'utf-8'));
 
 // IMPORT DATA INTO DB
 const importData = async () => {
   try {
     const categoriasResult = await Categoria.create(categorias);
+    await SubCategoria.create(subSategorias);
     await Estado.create(estados);
     const pacoteResults = await Pacote.create(pacotes);
     await Perfil.create(perfis);
     await User.create(users, { validateBeforeSave: false });
-    
-    const usersResult = await User.findOne({"role.perfilCode": 1}, {_id: 1})
-    
+
+    const usersResult = await User.findOne(
+      { 'role.perfilCode': 1 },
+      { _id: 1 }
+    );
+
     servicos.forEach(el => {
-      el.categoria  = categoriasResult[0]._id;
-      el.pacote     = pacoteResults[0]._id;
-      el.fornecedor = usersResult._id
-    })
+      el.categoria = categoriasResult[0]._id;
+      el.pacote = pacoteResults[0]._id;
+      el.fornecedor = usersResult._id;
+    });
     await Servico.create(servicos);
 
     console.log('Data successfully loaded!');
@@ -64,6 +82,7 @@ const importData = async () => {
 const deleteData = async () => {
   try {
     await Categoria.deleteMany();
+    await SubCategoria.deleteMany();
     await Estado.deleteMany();
     await Pacote.deleteMany();
     await Perfil.deleteMany();

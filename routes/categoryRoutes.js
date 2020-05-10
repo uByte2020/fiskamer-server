@@ -5,6 +5,19 @@ const authController = require('./../controllers/authController');
 const router = express.Router();
 
 router
+  .route('/:id/subCategorias')
+  .patch(
+    authController.protect,
+    authController.restrictTo(0, 1),
+    categoryController.addSubCategoria
+  )
+  .delete(
+    authController.protect,
+    authController.restrictTo(0, 1),
+    categoryController.removeSubCategoria
+  );
+
+router
   .route('/')
   .get(categoryController.getAllCategories)
   .post(

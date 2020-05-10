@@ -18,6 +18,7 @@ const solicitacaoRouter = require('./routes/solicitacaoRouter');
 const favoriteServiceRoutes = require('./routes/favoriteServiceRoutes');
 const planejamentoRoutes = require('./routes/planejamentoRoutes');
 const commentRoutes = require('./routes/commentRoutes');
+const subCategoryRoutes = require('./routes/subCategoryRoutes');
 const statisticRouter = require('./routes/statisticsRoutes');
 const logsRouter = require('./routes/logRoutes');
 const AppError = require('./utils/appError');
@@ -65,6 +66,7 @@ app.use((req, res, next) => {
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/perfils', profileRouter);
 app.use('/api/v1/categories', categoryRouter);
+app.use('/api/v1/subCategories', subCategoryRoutes);
 app.use('/api/v1/estados', stateRouter);
 app.use('/api/v1/packages', packageRouter);
 app.use('/api/v1/services', serviceRouter);

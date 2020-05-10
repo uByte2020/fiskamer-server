@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const categoriaSchema = new mongoose.Schema({
   categoria: {
     type: String,
-    required: [true, 'A Categoria deve ter uma descrição']
+    required: [true, 'A Categoria deve ter uma descrição'],
+    unique: true
   },
   subCategorias: {
     type: [

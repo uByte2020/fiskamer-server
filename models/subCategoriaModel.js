@@ -4,7 +4,8 @@ const subCategoriaSchema = new mongoose.Schema({
   subCategoria: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
+    unique: true
   },
   createdAt: {
     type: Date,
